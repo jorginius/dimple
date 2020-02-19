@@ -22,6 +22,9 @@
         this.showPercent = false;
         // Help: http://github.com/PMSI-AlignAlytics/dimple/wiki/dimple.axis#wiki-colors
         this.colors = null;
+
+        this.colorBounds = { min: null, max: null };
+
         // Help: http://github.com/PMSI-AlignAlytics/dimple/wiki/dimple.axis#wiki-overrideMin
         this.overrideMin = null;
         // Help: http://github.com/PMSI-AlignAlytics/dimple/wiki/dimple.axis#wiki-overrideMax
@@ -53,9 +56,9 @@
         // Help: http://github.com/PMSI-AlignAlytics/dimple/wiki/dimple.axis#wiki-ticks
         this.ticks = null;
         // Help: http://github.com/PMSI-AlignAlytics/dimple/wiki/dimple.axis#wiki-fontSize
-        this.fontSize = "10px";
+        this.fontSize = '10px';
         // Help: http://github.com/PMSI-AlignAlytics/dimple/wiki/dimple.axis#wiki-fontFamily
-        this.fontFamily = "sans-serif";
+        this.fontFamily = 'sans-serif';
         // Help: http://github.com/PMSI-AlignAlytics/dimple/wiki/dimple.axis#wiki-autoRotateLabel
         this.autoRotateLabel = (autoRotateLabel === null || autoRotateLabel === undefined ? true : autoRotateLabel);
 

@@ -66,6 +66,9 @@
         this.showPercent = false;
         // Help: http://github.com/PMSI-AlignAlytics/dimple/wiki/dimple.axis#wiki-colors
         this.colors = null;
+
+        this.colorBounds = { min: null, max: null };
+
         // Help: http://github.com/PMSI-AlignAlytics/dimple/wiki/dimple.axis#wiki-overrideMin
         this.overrideMin = null;
         // Help: http://github.com/PMSI-AlignAlytics/dimple/wiki/dimple.axis#wiki-overrideMax
@@ -97,9 +100,9 @@
         // Help: http://github.com/PMSI-AlignAlytics/dimple/wiki/dimple.axis#wiki-ticks
         this.ticks = null;
         // Help: http://github.com/PMSI-AlignAlytics/dimple/wiki/dimple.axis#wiki-fontSize
-        this.fontSize = "10px";
+        this.fontSize = '10px';
         // Help: http://github.com/PMSI-AlignAlytics/dimple/wiki/dimple.axis#wiki-fontFamily
-        this.fontFamily = "sans-serif";
+        this.fontFamily = 'sans-serif';
         // Help: http://github.com/PMSI-AlignAlytics/dimple/wiki/dimple.axis#wiki-autoRotateLabel
         this.autoRotateLabel = (autoRotateLabel === null || autoRotateLabel === undefined ? true : autoRotateLabel);
 
@@ -754,7 +757,6 @@
             // Get the x and y totals for percentages.  This cannot be done in the loop above as we need the data aggregated before we get an abs total.
             // otherwise it will wrongly account for negatives and positives rolled together.
                 totals = { x: [], y: [], z: [], p: [] },
-                colorBounds = { min: null, max: null },
                 tot,
                 running = { x: [], y: [], z: [], p: [] },
                 addedCats = [],
@@ -1040,8 +1042,8 @@
                     totals.z[ret.zField.join("/")] = tot;
                 }
                 if (c !== null) {
-                    if (colorBounds.min === null || ret.cValue < colorBounds.min) { colorBounds.min = ret.cValue; }
-                    if (colorBounds.max === null || ret.cValue > colorBounds.max) { colorBounds.max = ret.cValue; }
+                    if (c.colorBounds.min === null || ret.cValue < c.colorBounds.min) { c.colorBounds.min = ret.cValue; }
+                    if (c.colorBounds.max === null || ret.cValue > c.colorBounds.max) { c.colorBounds.max = ret.cValue; }
                 }
             }, this);
             // Before calculating the positions we need to sort elements
@@ -1101,23 +1103,23 @@
                 getAxisData(p, "p", "angle");
 
                 // If there is a color axis
-                if (c !== null && colorBounds.min !== null && colorBounds.max !== null) {
+                if (c !== null && c.colorBounds.min !== null && c.colorBounds.max !== null) {
                     // Handle matching min and max
-                    if (colorBounds.min === colorBounds.max) {
-                        colorBounds.min -= 0.5;
-                        colorBounds.max += 0.5;
+                    if (c.colorBounds.min === c.colorBounds.max) {
+                        c.colorBounds.min -= 0.5;
+                        c.colorBounds.max += 0.5;
                     }
                     // Limit the bounds of the color value to be within the range.  Users may override the axis bounds and this
                     // allows a 2 color scale rather than blending if the min and max are set to 0 and 0.01 for example negative values
                     // and zero value would be 1 color and positive another.
-                    colorBounds.min = (c.overrideMin || colorBounds.min);
-                    colorBounds.max = (c.overrideMax || colorBounds.max);
-                    ret.cValue = (ret.cValue > colorBounds.max ? colorBounds.max : (ret.cValue < colorBounds.min ? colorBounds.min : ret.cValue));
+                    c.colorBounds.min = (c.overrideMin || c.colorBounds.min);
+                    c.colorBounds.max = (c.overrideMax || c.colorBounds.max);
+                    ret.cValue = (ret.cValue > c.colorBounds.max ? c.colorBounds.max : (ret.cValue < c.colorBounds.min ? c.colorBounds.min : ret.cValue));
                     // Calculate the factors for the calculations
-                    scale = d3.scaleLinear().range([0, (c.colors === null || c.colors.length === 1 ? 1 : c.colors.length - 1)]).domain([colorBounds.min, colorBounds.max]);
+                    scale = d3.scaleLinear().range([0, (c.colors === null || c.colors.length === 1 ? 1 : c.colors.length - 1)]).domain([c.colorBounds.min, c.colorBounds.max]);
                     colorVal = scale(ret.cValue);
                     floatingPortion = colorVal - Math.floor(colorVal);
-                    if (ret.cValue === colorBounds.max) {
+                    if (ret.cValue === c.colorBounds.max) {
                         floatingPortion = 1;
                     }
                     // If there is a single color defined
