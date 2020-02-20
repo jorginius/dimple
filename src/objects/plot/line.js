@@ -88,6 +88,9 @@
                 }
                 // Find the corresponding row in the lineData
                 keyString = dimple._createClass(key);
+                if (chart.classId) {
+                    keyString += '-' + chart.classId;
+                }
                 for (k = 0; k < lineData.length; k += 1) {
                     if (lineData[k].keyString === keyString) {
                         rowIndex = k;

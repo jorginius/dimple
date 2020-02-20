@@ -677,6 +677,7 @@
         this._nextColor = 0;
         // The next series class index to use, this value is cycled around for all default classes
         this._nextClass = 0;
+        this.classId = null;
 
         // Copyright: 2015 AlignAlytics
         // License: "https://github.com/PMSI-AlignAlytics/dimple/blob/master/MIT-LICENSE.txt"
@@ -3812,6 +3813,9 @@
                 }
                 // Find the corresponding row in the lineData
                 keyString = dimple._createClass(key);
+                if (chart.classId) {
+                    keyString += '-' + chart.classId;
+                }
                 for (k = 0; k < lineData.length; k += 1) {
                     if (lineData[k].keyString === keyString) {
                         rowIndex = k;
